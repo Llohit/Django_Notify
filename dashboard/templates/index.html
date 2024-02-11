@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Data Display</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+            text-align: center;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Two grids side by side */
+            gap: 20px;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        /* Style for table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Custom classes for status */
+        .active td {
+            color: green;
+        }
+
+        .down td {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+        <h1>JSON Data Display</h1>
+        <div class="dashboard">
+            {% for key,queryset in data.items %}
+            <div class="card">
+                <h2>Account : {{ key }}</h2>
+                <div class="separator"></div> <!-- Separation between account ID and table -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Device Id</th>
+                            <th>Status</th>
+                            <th>Start time</th>
+                            <th>Duration</th>
+                            <th>Cleared at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in queryset %}
+                        <tr class="{% if obj.state == 'active' %}active{% elif obj.state == 'down' %}down{% endif %}">
+                            <td>{{ obj.device_id }}</td>
+                            <td>{{ obj.state }}</td>
+                            <td>{{ obj.created_at }}</td>
+                            <td>{{ obj.duration }}</td>
+                            <td>{{ obj.finalized_at }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </div>
+</body>
+</html>
